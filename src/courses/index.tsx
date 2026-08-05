@@ -14,6 +14,8 @@ export default function CourseManager({ profile, onSectionComplete, onQuizComple
   const [activeCourseId, setActiveCourseId] = useState<string | null>(null);
 
   const activeCourse = COURSES.find((c) => c.id === activeCourseId);
+  const currentCourseIdx = COURSES.findIndex((c) => c.id === activeCourseId);
+  const nextCourse = currentCourseIdx >= 0 && currentCourseIdx < COURSES.length - 1 ? COURSES[currentCourseIdx + 1] : null;
 
   if (activeCourse) {
     return (
@@ -25,6 +27,8 @@ export default function CourseManager({ profile, onSectionComplete, onQuizComple
         onSectionComplete={onSectionComplete}
         onQuizComplete={onQuizComplete}
         onBack={() => setActiveCourseId(null)}
+        onNextCourse={nextCourse ? () => setActiveCourseId(nextCourse.id) : undefined}
+        nextCourseTitle={nextCourse?.title}
       />
     );
   }

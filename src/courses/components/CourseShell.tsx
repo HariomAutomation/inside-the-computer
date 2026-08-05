@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, CheckCircle2, Circle, Trophy, Sparkles } from 'lucide-react';
+import { ChevronLeft, CheckCircle2, Circle, Trophy, Sparkles, ChevronRight } from 'lucide-react';
 import type { CourseSection, LearnerProfile } from '../types';
 import QuizModal from './QuizModal';
 
@@ -12,9 +12,11 @@ interface CourseShellProps {
   onSectionComplete: (sectionId: string) => void;
   onQuizComplete: (sectionId: string, score: number) => void;
   onBack: () => void;
+  onNextCourse?: () => void;
+  nextCourseTitle?: string;
 }
 
-export default function CourseShell({ courseId, title, sections, profile, onSectionComplete, onQuizComplete, onBack }: CourseShellProps) {
+export default function CourseShell({ courseId, title, sections, profile, onSectionComplete, onQuizComplete, onBack, onNextCourse, nextCourseTitle }: CourseShellProps) {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [showQuiz, setShowQuiz] = useState(false);
   const current = sections[currentIdx];
@@ -164,15 +166,25 @@ export default function CourseShell({ courseId, title, sections, profile, onSect
               </button>
             )}
 
-            <button
-              onClick={() => {
-                onSectionComplete(current.id);
-                if (currentIdx < sections.length - 1) setCurrentIdx(currentIdx + 1);
-              }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-primary-500 to-purple-500 text-white hover:opacity-90 transition-all"
-            >
-              {currentIdx === sections.length - 1 ? '🎉 Complete' : 'Next →'}
-            </button>
+            {currentIdx === sections.length - 1 && onNextCourse ? (
+              <button
+                onClick={onNextCourse}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:opacity-90 transition-all"
+              >
+                Next Course: {nextCourseTitle}
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  onSectionComplete(current.id);
+                  if (currentIdx < sections.length - 1) setCurrentIdx(currentIdx + 1);
+                }}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-primary-500 to-purple-500 text-white hover:opacity-90 transition-all"
+              >
+                Next →
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -244,8 +244,10 @@ export default function App() {
               )}
             </AnimatePresence>
 
-            {/* Universal Simulation Control Bar */}
-            <UniversalSimulationControlBar />
+            {/* Universal Simulation Control Bar - only for modules with simulations */}
+            {MASTER_MODULES[selectedModuleIndex]?.id && ['m2', 'm3'].includes(MASTER_MODULES[selectedModuleIndex].id) && (
+              <UniversalSimulationControlBar />
+            )}
 
             {/* Active Section Simulation Component */}
             <CurrentSection />
