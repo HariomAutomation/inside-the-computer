@@ -166,12 +166,15 @@ export default function CourseShell({ courseId, title, sections, profile, onSect
               </button>
             )}
 
-            {currentIdx === sections.length - 1 && onNextCourse ? (
+            {onNextCourse ? (
               <button
-                onClick={onNextCourse}
+                onClick={() => {
+                  onSectionComplete(current.id);
+                  onNextCourse();
+                }}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:opacity-90 transition-all"
               >
-                Next Course: {nextCourseTitle}
+                Next: {nextCourseTitle}
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
             ) : (

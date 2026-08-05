@@ -69,6 +69,24 @@ export const useCourseStore = create<CourseStore>()(
           const totalScore = Object.values(updatedSections).reduce((a, s) => a + s.quizScore, 0);
           const totalPossible = Object.values(updatedSections).reduce((a, s) => a + s.quizTotal, 0);
 
+          // Record activity & calculate streak
+          const today = new Date().toISOString().split('T')[0];
+          const newHeatmap = {
+            ...state.activityHeatmap,
+            [today]: (state.activityHeatmap[today] || 0) + 1,
+          };
+          let streak = 0;
+          const d = new Date();
+          while (true) {
+            const key = d.toISOString().split('T')[0];
+            if (newHeatmap[key]) {
+              streak++;
+              d.setDate(d.getDate() - 1);
+            } else {
+              break;
+            }
+          }
+
           return {
             courseProgress: {
               ...state.courseProgress,
@@ -82,6 +100,8 @@ export const useCourseStore = create<CourseStore>()(
             level: Math.floor((state.totalXP + xpGain) / 500) + 1,
             totalQuizzesTaken: state.totalQuizzesTaken + 1,
             totalQuizzesPassed: state.totalQuizzesPassed + (passed ? 1 : 0),
+            activityHeatmap: newHeatmap,
+            streakDays: streak,
           };
         }),
 
@@ -104,12 +124,28 @@ export const useCourseStore = create<CourseStore>()(
 
       recordActivity: () => {
         const today = new Date().toISOString().split('T')[0];
-        set((state) => ({
-          activityHeatmap: {
+        set((state) => {
+          const newHeatmap = {
             ...state.activityHeatmap,
             [today]: (state.activityHeatmap[today] || 0) + 1,
-          },
-        }));
+          };
+          // Calculate streak from consecutive days
+          let streak = 0;
+          const d = new Date();
+          while (true) {
+            const key = d.toISOString().split('T')[0];
+            if (newHeatmap[key]) {
+              streak++;
+              d.setDate(d.getDate() - 1);
+            } else {
+              break;
+            }
+          }
+          return {
+            activityHeatmap: newHeatmap,
+            streakDays: streak,
+          };
+        });
       },
 
       getMasteryLevel: (quizScore, quizTotal) => {
