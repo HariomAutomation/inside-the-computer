@@ -1,5 +1,6 @@
 appId: com.insidethecomputer.app
 productName: Inside the Computer
+asar: false
 directories:
   output: release
 files:
