@@ -166,7 +166,18 @@ export default function CourseShell({ courseId, title, sections, profile, onSect
               </button>
             )}
 
-            {currentIdx === sections.length - 1 && onNextCourse ? (
+            {currentIdx < sections.length - 1 ? (
+              <button
+                onClick={() => {
+                  onSectionComplete(courseId, current.id);
+                  setCurrentIdx(currentIdx + 1);
+                }}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-primary-500 to-purple-500 text-white hover:opacity-90 transition-all"
+              >
+                Next
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            ) : onNextCourse ? (
               <button
                 onClick={() => {
                   onSectionComplete(courseId, current.id);
@@ -179,13 +190,11 @@ export default function CourseShell({ courseId, title, sections, profile, onSect
               </button>
             ) : (
               <button
-                onClick={() => {
-                  onSectionComplete(courseId, current.id);
-                  if (currentIdx < sections.length - 1) setCurrentIdx(currentIdx + 1);
-                }}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-primary-500 to-purple-500 text-white hover:opacity-90 transition-all"
+                onClick={() => onSectionComplete(courseId, current.id)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:opacity-90 transition-all"
               >
-                Next →
+                Complete
+                <CheckCircle2 className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
