@@ -20,7 +20,7 @@ import Section11 from './sections/Section11';
 import Section12 from './sections/Section12';
 import CourseManager from './courses';
 import { MASTER_MODULES } from './constants/modulesData';
-import { Sparkles, CheckCircle2, ChevronRight, Zap, Grid, Layers } from 'lucide-react';
+import { Sparkles, CheckCircle2, ChevronLeft, ChevronRight, Zap, Grid, Layers } from 'lucide-react';
 import { useMentorStore } from './stores/useMentorStore';
 import { useCourseStore } from './courses/store';
 import type { LearnerProfile } from './courses/types';
@@ -204,12 +204,32 @@ export default function App() {
                 </div>
               </div>
 
-              <button
-                onClick={() => setIsModuleDrawerOpen(!isModuleDrawerOpen)}
-                className="px-3.5 py-1.5 rounded-xl glass text-xs font-mono text-white flex items-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
-              >
-                <Grid size={14} className="text-primary-400" /> Choose Module ({selectedModuleIndex + 1}/24)
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    if (selectedModuleIndex > 0) setSelectedModuleIndex(selectedModuleIndex - 1);
+                  }}
+                  disabled={selectedModuleIndex === 0}
+                  className="p-2 rounded-xl glass text-white/60 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-white/10"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  onClick={() => setIsModuleDrawerOpen(!isModuleDrawerOpen)}
+                  className="px-3.5 py-1.5 rounded-xl glass text-xs font-mono text-white flex items-center gap-1.5 hover:bg-white/10 transition-all border border-white/10"
+                >
+                  <Grid size={14} className="text-primary-400" /> Choose Module ({selectedModuleIndex + 1}/24)
+                </button>
+                <button
+                  onClick={() => {
+                    if (selectedModuleIndex < MASTER_MODULES.length - 1) setSelectedModuleIndex(selectedModuleIndex + 1);
+                  }}
+                  disabled={selectedModuleIndex === MASTER_MODULES.length - 1}
+                  className="p-2 rounded-xl glass text-white/60 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors border border-white/10"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </div>
             </div>
 
             {/* Expandable Module Selector Drawer */}
