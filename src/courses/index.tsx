@@ -6,8 +6,8 @@ import CourseBrowser from './components/CourseBrowser';
 
 interface CourseManagerProps {
   profile: LearnerProfile;
-  onSectionComplete: (sectionId: string) => void;
-  onQuizComplete: (sectionId: string, score: number) => void;
+  onSectionComplete: (courseId: string, sectionId: string) => void;
+  onQuizComplete: (courseId: string, sectionId: string, score: number) => void;
 }
 
 export default function CourseManager({ profile, onSectionComplete, onQuizComplete }: CourseManagerProps) {
@@ -24,8 +24,8 @@ export default function CourseManager({ profile, onSectionComplete, onQuizComple
         title={activeCourse.title}
         sections={activeCourse.sections}
         profile={profile}
-        onSectionComplete={onSectionComplete}
-        onQuizComplete={onQuizComplete}
+        onSectionComplete={(_courseId, sectionId) => onSectionComplete(activeCourse.id, sectionId)}
+        onQuizComplete={(_courseId, sectionId, score) => onQuizComplete(activeCourse.id, sectionId, score)}
         onBack={() => setActiveCourseId(null)}
         onNextCourse={nextCourse ? () => setActiveCourseId(nextCourse.id) : undefined}
         nextCourseTitle={nextCourse?.title}

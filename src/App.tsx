@@ -32,12 +32,12 @@ export default function App() {
   const { openExplainModal } = useMentorStore();
   const courseStore = useCourseStore();
 
-  const handleSectionComplete = useCallback((sectionId: string) => {
-    courseStore.completeSection('c1', sectionId, 10, 10);
+  const handleSectionComplete = useCallback((courseId: string, sectionId: string) => {
+    courseStore.completeSection(courseId, sectionId, 10, 10);
   }, [courseStore]);
 
-  const handleQuizComplete = useCallback((sectionId: string, score: number) => {
-    courseStore.completeSection('c1', sectionId, score, 10);
+  const handleQuizComplete = useCallback((courseId: string, sectionId: string, score: number) => {
+    courseStore.completeSection(courseId, sectionId, score, 10);
     courseStore.addXP(score * 10);
   }, [courseStore]);
 

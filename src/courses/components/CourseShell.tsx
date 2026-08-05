@@ -9,8 +9,8 @@ interface CourseShellProps {
   title: string;
   sections: CourseSection[];
   profile: LearnerProfile;
-  onSectionComplete: (sectionId: string) => void;
-  onQuizComplete: (sectionId: string, score: number) => void;
+  onSectionComplete: (courseId: string, sectionId: string) => void;
+  onQuizComplete: (courseId: string, sectionId: string, score: number) => void;
   onBack: () => void;
   onNextCourse?: () => void;
   nextCourseTitle?: string;
@@ -122,7 +122,7 @@ export default function CourseShell({ courseId, title, sections, profile, onSect
                     courseId={courseId}
                     sectionId={current.id}
                     onComplete={(score, _total) => {
-                      onQuizComplete(current.id, score);
+                      onQuizComplete(courseId, current.id, score);
                       setShowQuiz(false);
                       if (currentIdx < sections.length - 1) {
                         setCurrentIdx(currentIdx + 1);
@@ -166,10 +166,10 @@ export default function CourseShell({ courseId, title, sections, profile, onSect
               </button>
             )}
 
-            {onNextCourse ? (
+            {currentIdx === sections.length - 1 && onNextCourse ? (
               <button
                 onClick={() => {
-                  onSectionComplete(current.id);
+                  onSectionComplete(courseId, current.id);
                   onNextCourse();
                 }}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:opacity-90 transition-all"
@@ -180,7 +180,7 @@ export default function CourseShell({ courseId, title, sections, profile, onSect
             ) : (
               <button
                 onClick={() => {
-                  onSectionComplete(current.id);
+                  onSectionComplete(courseId, current.id);
                   if (currentIdx < sections.length - 1) setCurrentIdx(currentIdx + 1);
                 }}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-primary-500 to-purple-500 text-white hover:opacity-90 transition-all"
